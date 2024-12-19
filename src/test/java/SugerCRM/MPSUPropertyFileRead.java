@@ -1,4 +1,4 @@
-package Ciber_PIC_Automation.Captiv;
+package SugerCRM;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
