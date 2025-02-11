@@ -15,8 +15,7 @@ public class MouseHover1 {
 
 	@Test
 	public void doubleClick() throws InterruptedException {
-		System.setProperty("webdriver.gecko.driver",
-				"C://D Drive//Selenium_jars//geckodriver-v0.34.0-win32//geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", "C://Docs//Driver//geckodriver.exe");
 		WebDriver driver = new FirefoxDriver();
 
 		// Launch the URL

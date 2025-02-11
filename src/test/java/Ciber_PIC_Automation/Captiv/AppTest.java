@@ -17,16 +17,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 public class AppTest {
-	private static String UTILS = "Utils";
+
 	public static WebElement webelement;
 	public static List<WebElement> webelements = null;
 	public static WebDriver driver = null;
@@ -37,9 +37,6 @@ public class AppTest {
 	public static final String passwordfld = "//input[@name='password']";
 	public static final String signinbtn = "//a[@name='login_button']";
 	public static final String orgbtn = "//div[@id='Accounts_sidebar-nav-item']//descendant::span/child::span[contains(text(),'Organizations')]";
-	// public static final String expbtn =
-	// "//div[@id='Accounts_sidebar-nav-item']/descendant::span[@class='collapsed
-	// h-full w-full']/span";
 	public static final String expbtn = "//button[@aria-label='Open']//span[contains(@class,'sicon sicon-hamburger')]";
 	public static final String orglt = "//button[@aria-label='Organizations menu']";
 	public static final String crorgdrpdn = "//span[normalize-space()='Create Organization']";
@@ -100,8 +97,8 @@ public class AppTest {
 	public static final String password = "Captive@123";
 	public static final String caStatus = "Regularisation of casual workers";
 	public static final String addNames = "Private Org";
-	public static final String rcsub = "01/09/2022";
-	public static final String efdt = "05/25/2022";
+	public static final String rcsub = "03/09/2022";
+	public static final String efdt = "07/25/2022";
 	public static String company = null;
 	public static String submissionName = null;
 
@@ -109,11 +106,9 @@ public class AppTest {
 	public static void createOrganization() throws UnknownHostException, InterruptedException, AWTException {
 
 		Robot rb = new Robot();
-		startBrowser("firefox");
+		startBrowser("chrome");
 		driver.manage().window().maximize();
-
 		String url = "https://sugardev.captiveresources.com/#";
-
 		driver.get(url);
 		Thread.sleep(2000);
 		WebElement cpusername = driver.findElement(By.xpath(usernametxtfld));
@@ -132,14 +127,12 @@ public class AppTest {
 				WebElement expend = driver.findElement(By.xpath(expbtn));
 				actions.moveToElement(expend).build().perform();
 				Thread.sleep(3000);
-
 				actions.moveToElement(expend).click().perform();
-				break; // Exit loop if successful
+				break;
 			} catch (StaleElementReferenceException e) {
 				System.out.println("Stale Element, retrying...");
 			}
 		}
-		;
 
 		WebElement org = driver.findElement(By.xpath(orgbtn));
 		actions.moveToElement(org).perform();
@@ -199,14 +192,13 @@ public class AppTest {
 		actions.moveToElement(captive).click().perform();
 		Thread.sleep(3000);
 		WebElement cpnmsearch = driver.findElement(By.xpath(reqfldSearch));
-		insertTextIntoTextField(cpnmsearch, MPSUPropertyFileRead.FileRead("ProjectData.properties", "Captive"));
+		insertTextIntoTextField(cpnmsearch, MPSUPropertyFileRead.FileRead("ProjectData.properties", "CaptiveName"));
 		Thread.sleep(3000);
-		rb.keyPress(KeyEvent.VK_ENTER);
-		rb.keyRelease(KeyEvent.VK_ENTER);
+		cpnmsearch.sendKeys(Keys.ENTER);
 		Thread.sleep(3000);
 
 		WebElement promgrfld = driver.findElement(By.xpath(promgr));
-		actions.moveToElement(promgrfld).click().perform();
+		promgrfld.click();
 		Thread.sleep(3000);
 		WebElement pmsearch = driver.findElement(By.xpath(reqfldSearch));
 		pmsearch.click();
@@ -216,9 +208,11 @@ public class AppTest {
 		rb.keyPress(KeyEvent.VK_ENTER);
 		rb.keyRelease(KeyEvent.VK_ENTER);
 		Thread.sleep(3000);
+
 		WebElement recisub = driver.findElement(By.xpath(recSub));
 		recisub.sendKeys(rcsub);
 		Thread.sleep(3000);
+
 		WebElement memtypfld = driver.findElement(By.xpath(memtyp));
 		actions.moveToElement(memtypfld).click().perform();
 		Thread.sleep(3000);
@@ -295,38 +289,45 @@ public class AppTest {
 
 		System.out.println(prosno.getText());
 		Thread.sleep(3000);
+
+		driver.close();
 	}
 
 	public static WebDriver startBrowser(String browserName) throws UnknownHostException {
 
 		if (browserName.equalsIgnoreCase("firefox")) {
+
 			System.setProperty("webdriver.gecko.driver", "C:/Docs/Driver/geckodriver.exe");
+			driver = new FirefoxDriver();
+
 			/*
-			 * final boolean isHeadless = Boolean.parseBoolean(
-			 * Objects.requireNonNullElse(System.getProperty("headless"), "true"));
-			 * WebDriverManager.chromedriver() .setup();
+			 * final boolean isHeadless = Boolean
+			 * .parseBoolean(Objects.requireNonNullElse(System.getProperty("headless"),
+			 * "true")); WebDriverManager.firefoxdriver().setup();
+			 * 
+			 * final FirefoxOptions options = new FirefoxOptions(); //
+			 * options.addArguments("--headless"); options.addArguments("--no-sandbox");
+			 * options.addArguments("--disable-dev-shm-usage");
+			 * options.addArguments("--window-size=1050,600");
+			 * 
+			 * if (isHeadless) { // options.addArguments("--headless"); }
+			 * 
+			 * options.addArguments("--safebrowsing-disable-download-protection"); driver =
+			 * new FirefoxDriver(options);
 			 */
-			final FirefoxOptions options = new FirefoxOptions();
-			options.addArguments("--headless");
+		} else if (browserName.equalsIgnoreCase("edge")) {
+			WebDriverManager.edgedriver().setup();
+			driver = new EdgeDriver();
+		} else if (browserName.equalsIgnoreCase("chrome")) {
+
+			WebDriverManager.chromedriver().setup();
+			ChromeOptions options = new ChromeOptions();
+			// options.addArguments("--headless");
 			options.addArguments("--no-sandbox");
 			options.addArguments("--disable-dev-shm-usage");
 			options.addArguments("--window-size=1050,600");
-			/*
-			 * if (isHeadless) { options.addArguments("--headless"); }
-			 */
 			options.addArguments("--safebrowsing-disable-download-protection");
-
-			// chromeDriver = new ChromeDriver(options);
-			driver = new FirefoxDriver(options);
-		} else if (browserName.equalsIgnoreCase("iexplorer")) {
-			System.setProperty("webdriver.ie.driver", UTILS + "\\IEDriverServer.exe");
-			DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
-			capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-			capabilities.setCapability("ignoreZoomSetting", true);
-			driver = new InternetExplorerDriver(capabilities);
-		} else if (browserName.equalsIgnoreCase("chrome")) {
-			System.setProperty("webdriver.chrome.driver", "C:/Docs/Driver/chromedriver.exe");
-			driver = new ChromeDriver();
+			driver = new ChromeDriver(options);
 		}
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.manage().deleteAllCookies();
@@ -342,11 +343,6 @@ public class AppTest {
 		driver.manage().window().maximize();
 		return driver;
 
-	}
-
-	private static FirefoxOptions FirefoxOptions() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public static void insertTextIntoTextField(WebElement webElement, String inputText) {
