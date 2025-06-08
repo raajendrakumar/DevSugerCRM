@@ -13,7 +13,7 @@ public class Timestamp {
 
 	    return formatter.format(date);
 	}
-	
+
 	public static String getDateTime() {
 	    Date date = Calendar.getInstance().getTime();
 
@@ -21,6 +21,5 @@ public class Timestamp {
 
 	    return formatter.format(date);
 	}
-	
+
 }
-	

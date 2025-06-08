@@ -25,7 +25,7 @@ import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
-public class AppTest {
+public class SugerStage {
 
 	public static WebElement webelement;
 	public static List<WebElement> webelements = null;
@@ -102,13 +102,13 @@ public class AppTest {
 	public static String company = null;
 	public static String submissionName = null;
 
-	@Test(invocationCount = 10)
+	@Test(invocationCount = 21)
 	public static void createOrganization() throws UnknownHostException, InterruptedException, AWTException {
 
 		Robot rb = new Robot();
 		startBrowser("firefox");
 		driver.manage().window().maximize();
-		String url = "https://sugardev.captiveresources.com/#";
+		String url = "https://sugarstage.captiveresources.com/#";
 		driver.get(url);
 		Thread.sleep(2000);
 		WebElement cpusername = driver.findElement(By.xpath(usernametxtfld));
@@ -145,7 +145,7 @@ public class AppTest {
 		crorg.click();
 		Thread.sleep(3000);
 
-		company = "DevTest_" + Timestamp.getTimeStamp();
+		company = "StgTest_" + Timestamp.getTimeStamp();
 
 		WebElement comyName = driver.findElement(By.xpath(companyName));
 		comyName.sendKeys(company);
@@ -171,7 +171,7 @@ public class AppTest {
 		save.click();
 		Thread.sleep(3000);
 
-		driver.findElement(By.partialLinkText("DevTest_")).click();
+		driver.findElement(By.partialLinkText("StgTest_")).click();
 		System.out.println("theLinkText: " + driver.getTitle());
 		Thread.sleep(3000);
 
@@ -182,7 +182,7 @@ public class AppTest {
 		sblnk.click();
 		Thread.sleep(3000);
 
-		submissionName = "DevTest_" + Timestamp.getTimeStamp();
+		submissionName = "StgTest_" + Timestamp.getTimeStamp();
 		Thread.sleep(3000);
 		WebElement sbName = driver.findElement(By.xpath(subName));
 		sbName.sendKeys(submissionName);
@@ -286,7 +286,7 @@ public class AppTest {
 		Thread.sleep(3000);
 
 		WebElement prosno = driver.findElement(By.xpath(ProspectNo));
-
+		Thread.sleep(3000);
 		System.out.println(prosno.getText());
 		Thread.sleep(3000);
 
@@ -300,21 +300,6 @@ public class AppTest {
 			System.setProperty("webdriver.gecko.driver", "C:/Docs/Driver/geckodriver.exe");
 			driver = new FirefoxDriver();
 
-			/*
-			 * final boolean isHeadless = Boolean
-			 * .parseBoolean(Objects.requireNonNullElse(System.getProperty("headless"),
-			 * "true")); WebDriverManager.firefoxdriver().setup();
-			 *
-			 * final FirefoxOptions options = new FirefoxOptions(); //
-			 * options.addArguments("--headless"); options.addArguments("--no-sandbox");
-			 * options.addArguments("--disable-dev-shm-usage");
-			 * options.addArguments("--window-size=1050,600");
-			 *
-			 * if (isHeadless) { // options.addArguments("--headless"); }
-			 *
-			 * options.addArguments("--safebrowsing-disable-download-protection"); driver =
-			 * new FirefoxDriver(options);
-			 */
 		} else if (browserName.equalsIgnoreCase("edge")) {
 			WebDriverManager.edgedriver().setup();
 			driver = new EdgeDriver();
@@ -322,7 +307,7 @@ public class AppTest {
 
 			WebDriverManager.chromedriver().setup();
 			ChromeOptions options = new ChromeOptions();
-			// options.addArguments("--headless");
+			options.addArguments("--headless");
 			options.addArguments("--no-sandbox");
 			options.addArguments("--disable-dev-shm-usage");
 			options.addArguments("--window-size=1050,600");

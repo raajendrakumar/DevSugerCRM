@@ -4,6 +4,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,8 +30,7 @@ public class BrokenLinks {
 		// To print the total number of links
 		System.out.println("Total links are " + links.size());
 		// used for loop to
-		for (int i = 0; i < links.size(); i++) {
-			WebElement element = links.get(i);
+		for (WebElement element : links) {
 			// By using "href" attribute, we could get the url of the requried link
 			String url = element.getAttribute("href");
 			// calling verifyLink() method here. Passing the parameter as url which we
